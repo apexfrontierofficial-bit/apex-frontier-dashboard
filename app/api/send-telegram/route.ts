@@ -58,7 +58,7 @@ ${action}
   } catch (error: any) {
 
     return Response.json({
-      error: error.message
+      error: error instanceof Error ? error.message : 'Unknown error'
     })
   }
 }
