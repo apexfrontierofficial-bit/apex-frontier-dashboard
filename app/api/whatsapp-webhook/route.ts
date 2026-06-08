@@ -37,7 +37,7 @@ export async function POST(req: Request) {
     console.log(error)
 
     return new Response(
-      error.message,
+      error instanceof Error ? error.message : 'Unknown error'
       {
         status: 500
       }

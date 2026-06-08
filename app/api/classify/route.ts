@@ -79,7 +79,7 @@ return Response.json(result)
     console.log(error)
 
     return Response.json({
-      error: error.message
+      error: error instanceof Error ? error.message : 'Unknown error'
     }, {
       status: 500
     })

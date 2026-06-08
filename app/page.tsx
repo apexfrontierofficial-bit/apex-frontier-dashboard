@@ -308,12 +308,19 @@ const closedCount = conversations.filter(
 ).length
 
   
-  useEffect(() => {
+useEffect(() => {
 
-    fetchSchools()
-    fetchConversations()
+  async function loadData() {
 
-  }, [])
+    await fetchSchools()
+    await fetchConversations()
+
+  }
+
+  loadData()
+
+}, [])
+
 
   return (
 
