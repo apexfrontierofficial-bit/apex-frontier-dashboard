@@ -25,7 +25,7 @@ export async function POST(req: Request) {
         process.env.TWILIO_WHATSAPP_NUMBER,
 
       to:
-        'whatsapp:+256777071744',
+        'whatsapp:+256702371998',
 
       body:
 `AI Workflow Response
@@ -44,7 +44,7 @@ ${response}`
   } catch (error: any) {
 
     return Response.json({
-      error: error.message
+      error: error instanceof Error ? error.message : 'Unknown error'
     })
   }
 }

@@ -21,6 +21,7 @@ type Conversation = {
   response?: string
   email_sent?: boolean
 telegram_sent?: boolean
+whatsapp_sent?: boolean
 }
 
 export default function Home() {
@@ -192,7 +193,7 @@ if (
 
 }
 
-
+if (!conversation.whatsapp_sent) {
 await fetch('/api/send-whatsapp', {
 
   method: 'POST',
@@ -211,7 +212,15 @@ await fetch('/api/send-whatsapp', {
 
   })
 
-})
+}) 
+await supabase
+  .from('conversations')
+  .update({
+    whatsapp_sent: true
+  })
+  .eq('id', conversation.id)
+
+}
 
           return {
             ...conversation,

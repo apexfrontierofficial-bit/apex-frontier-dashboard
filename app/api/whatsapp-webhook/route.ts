@@ -1,4 +1,12 @@
-import { supabase } from '@/lib/supabase'
+import { createClient } from '@supabase/supabase-js'
+
+const supabase = createClient(
+
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+
+)
 
 export async function POST(req: Request) {
 
@@ -14,9 +22,8 @@ export async function POST(req: Request) {
       body.get('From')
 
     console.log('WHATSAPP MESSAGE:', message)
-    console.log('FROM:', from)
 
-    await supabase
+    const { error } = await supabase
       .from('conversations')
       .insert([{
 
@@ -28,16 +35,22 @@ export async function POST(req: Request) {
 
       }])
 
+    if (error) {
+
+      console.log(error)
+
+    }
+
     return new Response('OK', {
       status: 200
     })
 
-  } catch (error: any) {
+  } catch (error) {
 
     console.log(error)
 
     return new Response(
-      error instanceof Error ? error.message : 'Unknown error'
+      'Webhook Error',
       {
         status: 500
       }
