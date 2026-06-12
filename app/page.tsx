@@ -88,7 +88,11 @@ return {
 
     console.log(error)
 
-    return 'Error'
+    return {
+      category: 'Error',
+      action: 'Retry later',
+      response: 'AI unavailable'
+    }
   }
 }
 
@@ -223,10 +227,24 @@ await supabase
 }
 
           return {
-            ...conversation,
-            category: aiResult.category,
-            action: aiResult.action,
-            response: aiResult.response,
+              ...conversation,
+
+  category:
+    typeof aiResult === 'string'
+      ? 'Unknown'
+      : aiResult.category,
+
+  action:
+    typeof aiResult === 'string'
+      ? 'Manual Review'
+      : aiResult.action,
+
+  response:
+    typeof aiResult === 'string'
+      ? 'AI unavailable'
+      : aiResult.response
+
+            ,
             status:
 
   aiResult.category === 'Urgent'
