@@ -1,12 +1,10 @@
-import { supabase } from '../../../lib/supabase'
+import { supabaseAdmin } from '../../../lib/supabase-admin'
 
 export async function POST(req: Request) {
 
   try {
 
     const formData = await req.formData()
-
-    console.log('FORM DATA RECEIVED')
 
     const message =
       formData.get('Body')
@@ -15,32 +13,23 @@ export async function POST(req: Request) {
       formData.get('ProfileName')
 
     console.log('MESSAGE:', message)
-    console.log('SENDER:', sender)
 
-    const { data, error } = await supabase
-      .from('conversations')
-      .insert([
+    const { data, error } =
+      await supabaseAdmin
+        .from('conversations')
+        .insert([
+          {
+            customer_name:
+              sender || 'Unknown',
 
-        {
-          customer_name:
-            sender || 'Unknown',
+            message:
+              message || 'Empty message'
+          }
+        ])
+        .select()
 
-          message:
-            message || 'Empty message'
-        }
-
-      ])
-      .select()
-
-    console.log('SUPABASE DATA:', data)
-    console.log('SUPABASE ERROR:', error)
-
-    if (error) {
-
-      return Response.json({
-        error: error.message
-      })
-    }
+    console.log(data)
+    console.log(error)
 
     return new Response('OK', {
       status: 200
@@ -48,7 +37,7 @@ export async function POST(req: Request) {
 
   } catch (error: any) {
 
-    console.log('WEBHOOK ERROR:', error)
+    console.log(error)
 
     return Response.json({
       error: error.message
