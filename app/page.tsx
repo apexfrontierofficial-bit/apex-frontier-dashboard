@@ -96,37 +96,7 @@ return {
   }
 }
 
-async function sendAutomatedEmail(
-  customer_name: string,
-  response: string
-) {
 
-  try {
-
-    await fetch('/api/send-email', {
-
-      method: 'POST',
-
-      headers: {
-        'Content-Type': 'application/json'
-      },
-
-      body: JSON.stringify({
-
-        customer_name,
-
-        response
-
-      })
-
-    })
-
-  } catch (error) {
-
-    console.log(error)
-    
-  }
-}
 
   async function fetchConversations() {
 
@@ -139,92 +109,7 @@ async function sendAutomatedEmail(
         data.map(async (conversation) => {
           const aiResult = await classifyConversation(conversation.message)
           
-/*if (!conversation.email_sent) {
 
-  await sendAutomatedEmail(
-
-    conversation.customer_name,
-
-    aiResult.response
-
-  )
-
-  await supabase
-    .from('conversations')
-    .update({
-      email_sent: true
-    })
-    .eq('id', conversation.id)
-
-}
-if (
-
-  aiResult.category === 'Urgent' &&
-
-  !conversation.telegram_sent
-
-) {
-
-  await fetch('/api/send-telegram', {
-
-    method: 'POST',
-
-    headers: {
-      'Content-Type': 'application/json'
-    },
-
-    body: JSON.stringify({
-
-      customer_name:
-        conversation.customer_name,
-
-      message:
-        conversation.message,
-
-      action:
-        aiResult.action
-
-    })
-
-  })
-
-  await supabase
-    .from('conversations')
-    .update({
-      telegram_sent: true
-    })
-    .eq('id', conversation.id)
-
-}
-
-if (!conversation.whatsapp_sent) {
-await fetch('/api/send-whatsapp', {
-
-  method: 'POST',
-
-  headers: {
-    'Content-Type': 'application/json'
-  },
-
-  body: JSON.stringify({
-
-    customer_name:
-      conversation.customer_name,
-
-    response:
-      aiResult.response
-
-  })
-
-}) 
-await supabase
-  .from('conversations')
-  .update({
-    whatsapp_sent: true
-  })
-  .eq('id', conversation.id)
-
-}*/
 
           return {
   ...conversation,
@@ -246,7 +131,6 @@ await supabase
       setConversations(formattedConversations)
     }
   }
-
 
   async function addSchool() {
 
