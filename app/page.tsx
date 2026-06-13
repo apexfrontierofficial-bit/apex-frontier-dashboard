@@ -139,7 +139,7 @@ async function sendAutomatedEmail(
         data.map(async (conversation) => {
           const aiResult = await classifyConversation(conversation.message)
           
-if (!conversation.email_sent) {
+/*if (!conversation.email_sent) {
 
   await sendAutomatedEmail(
 
@@ -224,36 +224,22 @@ await supabase
   })
   .eq('id', conversation.id)
 
-}
+}*/
 
           return {
-              ...conversation,
+  ...conversation,
 
-  category:
-    typeof aiResult === 'string'
-      ? 'Unknown'
-      : aiResult.category,
+  category: aiResult.category,
 
-  action:
-    typeof aiResult === 'string'
-      ? 'Manual Review'
-      : aiResult.action,
+  action: aiResult.action,
 
-  response:
-    typeof aiResult === 'string'
-      ? 'AI unavailable'
-      : aiResult.response
+  response: aiResult.response,
 
-            ,
-            status:
-
-  aiResult.category === 'Urgent'
-
-    ? 'Escalated'
-
-    : conversation.status || 'New'
-
-          }
+  status:
+    aiResult.category === 'Urgent'
+      ? 'Escalated'
+      : conversation.status || 'New'
+}
         })
       )
 
@@ -364,7 +350,7 @@ useEffect(() => {
           {activePage}
         </h1>
 
-        <div className="grid grid-cols-3 gap-6 mb-10">
+        <div className="grid grid-cols-2 lg:grid-cols-5 gap-6 mb-10">
 
           
 <DashboardCard
