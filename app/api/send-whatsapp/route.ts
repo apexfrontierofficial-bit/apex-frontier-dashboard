@@ -1,16 +1,28 @@
 import twilio from 'twilio'
 
-const client = twilio(
-
-  process.env.TWILIO_ACCOUNT_SID,
-
-  process.env.TWILIO_AUTH_TOKEN
-
-)
-
 export async function POST(req: Request) {
 
   try {
+
+    if (
+      !process.env.TWILIO_ACCOUNT_SID ||
+      !process.env.TWILIO_AUTH_TOKEN ||
+      !process.env.TWILIO_WHATSAPP_NUMBER
+    ) {
+      return Response.json({
+        error: 'Twilio environment variables are not configured'
+      }, {
+        status: 500
+      })
+    }
+
+    const client = twilio(
+
+      process.env.TWILIO_ACCOUNT_SID,
+
+      process.env.TWILIO_AUTH_TOKEN
+
+    )
 
     const body = await req.json()
 

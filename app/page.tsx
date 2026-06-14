@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { supabase } from '../lib/supabase'
+import { getSupabase } from '../lib/supabase'
 import Sidebar from '../components/Sidebar'
 import DashboardCard from '../components/DashboardCard'
 import ConversationsPanel from '../components/ConversationsPanel'
@@ -36,12 +36,14 @@ export default function Home() {
 
   async function fetchSchools() {
 
+    const supabase = getSupabase()
+
     const { data } = await supabase
       .from('schools')
       .select('*')
 
     if (data) {
-      setSchools(data)
+      setSchools(data as School[])
     }
   }
  
@@ -100,13 +102,15 @@ return {
 
   async function fetchConversations() {
 
+    const supabase = getSupabase()
+
     const { data } = await supabase
       .from('conversations')
       .select('*')
 
     if (data) {
       const formattedConversations = await Promise.all(
-        data.map(async (conversation) => {
+        (data as Conversation[]).map(async (conversation) => {
           const aiResult = await classifyConversation(conversation.message)
           
 
@@ -136,6 +140,8 @@ return {
 
     if (!schoolName) return
 
+    const supabase = getSupabase()
+
     await supabase
       .from('schools')
       .insert([
@@ -151,6 +157,8 @@ return {
 
   async function deleteSchool(id: string) {
 
+    const supabase = getSupabase()
+
     await supabase
       .from('schools')
       .delete()
@@ -163,6 +171,8 @@ return {
     id: string,
     status: string
   ) {
+
+    const supabase = getSupabase()
 
     await supabase
       .from('conversations')
